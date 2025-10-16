@@ -1,0 +1,26 @@
+schemaVersion: '0.3'
+description: Enable logging on an S3 bucket
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  BucketName:
+    type: String
+    description: Name of the S3 bucket
+  TargetBucket:
+    type: String
+    description: Target bucket for logs
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: EnableLogging
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: s3
+      Api: PutBucketLogging
+      Bucket: '{{ BucketName }}'
+      BucketLoggingStatus:
+        LoggingEnabled:
+          TargetBucket: '{{ TargetBucket }}'
+          TargetPrefix: 'logs/{{ BucketName }}/'
+    description: Enable access logging on the S3 bucket
+    isEnd: true

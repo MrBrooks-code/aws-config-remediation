@@ -1,0 +1,20 @@
+schemaVersion: '0.3'
+description: Enable log file validation on a CloudTrail trail
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  TrailName:
+    type: String
+    description: Name of the CloudTrail trail
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: EnableLogValidation
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: cloudtrail
+      Api: UpdateTrail
+      Name: '{{ TrailName }}'
+      EnableLogFileValidation: true
+    description: Enable log file integrity validation
+    isEnd: true

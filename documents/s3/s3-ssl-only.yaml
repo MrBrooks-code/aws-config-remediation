@@ -1,0 +1,40 @@
+schemaVersion: '0.3'
+description: Enforce SSL-only access to an S3 bucket
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  BucketName:
+    type: String
+    description: Name of the S3 bucket
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: EnforceSSL
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: s3
+      Api: PutBucketPolicy
+      Bucket: '{{ BucketName }}'
+      Policy: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "DenyInsecureTransport",
+              "Effect": "Deny",
+              "Principal": "*",
+              "Action": "s3:*",
+              "Resource": [
+                "arn:aws:s3:::{{ BucketName }}",
+                "arn:aws:s3:::{{ BucketName }}/*"
+              ],
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false"
+                }
+              }
+            }
+          ]
+        }
+    description: Add bucket policy requiring SSL/TLS
+    isEnd: true

@@ -1,0 +1,23 @@
+schemaVersion: '0.3'
+description: Enable encryption on a CloudTrail trail
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  TrailName:
+    type: String
+    description: Name of the CloudTrail trail
+  KmsKeyId:
+    type: String
+    description: KMS key ID for encryption
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: EnableEncryption
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: cloudtrail
+      Api: UpdateTrail
+      Name: '{{ TrailName }}'
+      KmsKeyId: '{{ KmsKeyId }}'
+    description: Enable KMS encryption for CloudTrail
+    isEnd: true

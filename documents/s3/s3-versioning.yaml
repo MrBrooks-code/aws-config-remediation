@@ -1,0 +1,21 @@
+schemaVersion: '0.3'
+description: Enable versioning on an S3 bucket
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  BucketName:
+    type: String
+    description: Name of the S3 bucket
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: EnableVersioning
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: s3
+      Api: PutBucketVersioning
+      Bucket: '{{ BucketName }}'
+      VersioningConfiguration:
+        Status: Enabled
+    description: Enable versioning on the S3 bucket
+    isEnd: true

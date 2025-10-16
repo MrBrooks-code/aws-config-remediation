@@ -1,0 +1,22 @@
+schemaVersion: '0.3'
+description: Enable automated backups on an RDS instance
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  DbInstanceId:
+    type: String
+    description: RDS DB instance identifier
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: EnableBackups
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: rds
+      Api: ModifyDBInstance
+      DBInstanceIdentifier: '{{ DbInstanceId }}'
+      BackupRetentionPeriod: 7
+      PreferredBackupWindow: '03:00-04:00'
+      ApplyImmediately: true
+    description: Enable automated backups with 7-day retention
+    isEnd: true

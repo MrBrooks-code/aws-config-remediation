@@ -1,0 +1,19 @@
+schemaVersion: '0.3'
+description: Enable automatic key rotation for a KMS CMK
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  KeyId:
+    type: String
+    description: KMS key ID or ARN
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: EnableKeyRotation
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: kms
+      Api: EnableKeyRotation
+      KeyId: '{{ KeyId }}'
+    description: Enable automatic annual key rotation
+    isEnd: true

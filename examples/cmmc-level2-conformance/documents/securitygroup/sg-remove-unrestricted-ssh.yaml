@@ -1,0 +1,26 @@
+schemaVersion: '0.3'
+description: Remove unrestricted SSH access from a security group
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  SecurityGroupId:
+    type: String
+    description: Security group ID
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: RemoveUnrestrictedSSH
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: ec2
+      Api: RevokeSecurityGroupIngress
+      GroupId: '{{ SecurityGroupId }}'
+      IpPermissions:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          IpRanges:
+            - CidrIp: 0.0.0.0/0
+              Description: Removed by automated remediation
+    description: Revoke SSH access from 0.0.0.0/0
+    isEnd: true

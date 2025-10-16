@@ -1,0 +1,23 @@
+schemaVersion: '0.3'
+description: Set retention period on a CloudWatch log group
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  LogGroupName:
+    type: String
+    description: Name of the CloudWatch log group
+  RetentionInDays:
+    type: Integer
+    description: Retention period in days
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: SetRetention
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: logs
+      Api: PutRetentionPolicy
+      logGroupName: '{{ LogGroupName }}'
+      retentionInDays: '{{ RetentionInDays }}'
+    description: Set log group retention policy
+    isEnd: true

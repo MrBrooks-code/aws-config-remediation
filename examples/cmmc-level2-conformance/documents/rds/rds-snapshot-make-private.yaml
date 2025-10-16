@@ -1,0 +1,22 @@
+schemaVersion: '0.3'
+description: Make an RDS snapshot private
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  DbSnapshotId:
+    type: String
+    description: RDS DB snapshot identifier
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: MakeSnapshotPrivate
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: rds
+      Api: ModifyDBSnapshotAttribute
+      DBSnapshotIdentifier: '{{ DbSnapshotId }}'
+      AttributeName: restore
+      ValuesToRemove:
+        - all
+    description: Remove public restore permissions
+    isEnd: true

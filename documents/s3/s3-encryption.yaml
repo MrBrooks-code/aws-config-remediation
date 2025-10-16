@@ -1,0 +1,24 @@
+schemaVersion: '0.3'
+description: Enable default encryption on an S3 bucket
+assumeRole: '{{ AutomationAssumeRole }}'
+parameters:
+  BucketName:
+    type: String
+    description: Name of the S3 bucket
+  AutomationAssumeRole:
+    type: String
+    description: IAM role for automation execution
+mainSteps:
+  - name: EnableEncryption
+    action: 'aws:executeAwsApi'
+    inputs:
+      Service: s3
+      Api: PutBucketEncryption
+      Bucket: '{{ BucketName }}'
+      ServerSideEncryptionConfiguration:
+        Rules:
+          - ApplyServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+            BucketKeyEnabled: true
+    description: Enable default AES256 encryption on the S3 bucket
+    isEnd: true
