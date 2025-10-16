@@ -1,6 +1,6 @@
-# CMMC 2.0 Level 2 Conformance Pack
+# AWS Config - CMMC 2.0 Level 2 Conformance Pack
 
-This Terraform example deploys a complete AWS Config conformance pack for **CMMC (Cybersecurity Maturity Model Certification) 2.0 Level 2** compliance, including automated remediation for applicable rules.
+This Terraform example deploys a complete AWS Config rules pack for **CMMC (Cybersecurity Maturity Model Certification) 2.0 Level 2** compliance, including automated remediation for applicable rules using SSM documents.
 
 ## Overview
 
@@ -247,30 +247,6 @@ terraform output high_priority_remediations
    - AWS Config Console > Remediation actions
    - Systems Manager > Automation executions
 
-## Cost Considerations
-
-### AWS Config Pricing
-
-- **Config Rules**: $0.001 per rule evaluation
-  - 134 rules × evaluations/month
-- **Configuration Items**: $0.003 per configuration item recorded
-- **Conformance Pack**: Included with Config rules pricing
-
-### Storage Costs
-
-- **S3 Bucket**: Config snapshots and history
-  - Varies by resource count and change frequency
-- **CloudWatch Logs**: If CloudTrail is configured
-
-### Estimated Monthly Cost
-
-For a typical environment with 1,000 resources:
-- Config Rules (127 active): ~$190-380/month
-- Configuration Recording: ~$100-200/month
-- S3 Storage: ~$10-50/month
-- **Total**: ~$300-630/month
-
-**Note**: Costs scale with resource count and evaluation frequency. Enabling the 7 commented-out rules will add approximately $10-20/month.
 
 ## Customization
 
